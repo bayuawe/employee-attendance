@@ -2,7 +2,13 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AbsensiController;
+use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\ProfilController;
 
+
+// admin
+use App\Http\Controllers\AdminDashboardController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home ');
 });
 
 Route::get('/dashboard', function () {
@@ -26,6 +32,26 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::get('/absensi', [AbsensiController::class, 'showAbsensiForm'])->name('absensi');
+Route::post('/absensi', [AbsensiController::class, 'submitAbsensi'])->name('absensi.submit');
+
+Route::get('/laporan-absensi', [LaporanController::class, 'showLaporanAbsensi'])->name('laporan.absensi');
+
+Route::get('/profil', [ProfilController::class, 'showProfil'])->name('profil');
+
+
+
+
+
+
+
+
+// Admin
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    // Add more admin routes as needed
 });
 
 require __DIR__.'/auth.php';
