@@ -69,6 +69,9 @@
                             </div>
                         </div>
                     </form>
+                    <a class="btn btn-link" href="{{ route('admin.register') }}">
+                        {{ __('Register as Admin') }}
+                    </a>
                 </div>
             </div>
         </div>

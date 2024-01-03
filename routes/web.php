@@ -6,9 +6,10 @@ use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\ProfilController;
 
-
 // admin
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\AdminController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,7 +22,7 @@ use App\Http\Controllers\AdminDashboardController;
 */
 
 Route::get('/', function () {
-    return view('home ');
+    return view('home');
 });
 
 Route::get('/dashboard', function () {
@@ -41,17 +42,9 @@ Route::get('/laporan-absensi', [LaporanController::class, 'showLaporanAbsensi'])
 
 Route::get('/profil', [ProfilController::class, 'showProfil'])->name('profil');
 
-
-
-
-
-
-
-
 // Admin
-Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
-    // Add more admin routes as needed
-});
+Route::get('admin/dashboard', function () {
+    return view('admin.dashboard');
+})->middleware(['auth', 'verified'])->name('admin.dashboard');
 
 require __DIR__.'/auth.php';

@@ -65,9 +65,6 @@
                             </div>
                         </div>
                     </form>
-                    <a class="btn btn-link" href="{{ route('admin.login') }}">
-                        {{ __('Login as Admin') }}
-                    </a>
                 </div>
             </div>
         </div>
