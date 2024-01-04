@@ -6,9 +6,18 @@ use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\ProfilController;
 
+// auth
+use App\Http\Controllers\Auth\RegisterController;
+
+
 // admin
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AdminController;
+
+// user
+use App\Http\Controllers\UserDashboardController;
+use App\Http\Controllers\UserController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -25,26 +34,20 @@ Route::get('/', function () {
     return view('home');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Auth
+Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+Route::post('/register', [RegisterController::class, 'register']);
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+// Admin routes
+Route::middleware(['auth', 'verified', 'admin'])->group(function () {
+    Route::get('admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    Route::post('/admin/logout', [AdminController::class, 'logout'])->name('admin.logout');
 });
 
-Route::get('/absensi', [AbsensiController::class, 'showAbsensiForm'])->name('absensi');
-Route::post('/absensi', [AbsensiController::class, 'submitAbsensi'])->name('absensi.submit');
-
-Route::get('/laporan-absensi', [LaporanController::class, 'showLaporanAbsensi'])->name('laporan.absensi');
-
-Route::get('/profil', [ProfilController::class, 'showProfil'])->name('profil');
-
-// Admin
-Route::get('admin/dashboard', function () {
-    return view('admin.dashboard');
-})->middleware(['auth', 'verified'])->name('admin.dashboard');
-
-require __DIR__.'/auth.php';
+// User routes
+Route::middleware(['auth', 'verified', 'user'])->group(function () {
+    Route::get('user/dashboard', [AdminDashboardController::class, 'index'])->name('user.dashboard');
+    Route::post('/user/logout', [AdminController::class, 'logout'])->name('user.logout');
+});
+require __DIR__ . '/auth.php';

@@ -1,5 +1,4 @@
-<?
-// AdminController.php
+<?php
 
 namespace App\Http\Controllers;
 
@@ -17,7 +16,22 @@ class AdminController extends Controller
     // Process admin login
     public function login(Request $request)
     {
-        // Implement admin login logic using the Auth facade
+        // Validate the login request
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        // Attempt to log in the admin using the guard 'admin'
+        if (Auth::guard('admin')->attempt($request->only('email', 'password'), $request->filled('remember'))) {
+            // If login successful, redirect to the admin dashboard
+            return redirect()->intended(route('admin.dashboard'));
+        }
+
+        // If login fails, redirect back with an error message
+        return redirect()->back()->withInput($request->only('email', 'remember'))->withErrors([
+            'email' => 'Invalid credentials.',
+        ]);
     }
 
     // Logout admin
